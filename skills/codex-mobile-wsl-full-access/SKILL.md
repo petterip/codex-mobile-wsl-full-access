@@ -5,7 +5,7 @@ description: Configure and verify ChatGPT/Codex mobile remote control of a Windo
 
 # Codex Mobile WSL Full Access
 
-Configure this workflow deterministically. Do not ask the user to run terminal commands that the agent can run. Do not expose, save, or publish usernames, hostnames, absolute paths, pairing codes, auth material, session logs, Docker container names, or repository contents.
+Configure this workflow deterministically. Do not ask the user to run terminal commands that the agent can run.
 
 ## 1. Request Desktop Action
 
@@ -72,5 +72,3 @@ Report only:
 - mobile permission mode is Full access
 - remote-control process is running
 - Docker end-to-end check passed without approval
-
-Do not include personal or machine-specific information.

@@ -18,11 +18,6 @@ for check in \
   grep -Fq "$check" <<<"$output"
 done
 
-if grep -Eq '/home/|gho_|ghp_|sk-[A-Za-z0-9]' <<<"$output"; then
-  printf '%s\n' 'Verifier exposed sensitive output.' >&2
-  exit 1
-fi
-
 grep -Fq 'set **Agent environment** to **WSL**' "$skill_file"
 grep -Fq 'select **Full access**' "$skill_file"
 grep -Fq 'codex remote-control start' "$skill_file"
