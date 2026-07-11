@@ -18,7 +18,7 @@ else
   status 'Codex CLI' FAIL
 fi
 
-if docker ps >/dev/null 2>&1; then
+if command -v docker >/dev/null 2>&1 && docker ps >/dev/null 2>&1; then
   status 'Docker socket access' PASS
 else
   status 'Docker socket access' FAIL
