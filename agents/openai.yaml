@@ -1,0 +1,4 @@
+interface:
+  display_name: "Codex Mobile WSL Full Access"
+  short_description: "Set up Codex mobile control of a WSL host with full permissions."
+  default_prompt: "Set up Codex mobile remote control for my WSL host with full permissions."
