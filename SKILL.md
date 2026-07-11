@@ -7,48 +7,24 @@ description: Configure and verify ChatGPT/Codex mobile remote control of a Windo
 
 Configure this workflow deterministically. Do not ask the user to run terminal commands that the agent can run. Do not expose, save, or publish usernames, hostnames, absolute paths, pairing codes, auth material, session logs, Docker container names, or repository contents.
 
-## 1. Inspect First
-
-Run `scripts/verify_host.sh` from the skill directory. Report only pass/fail status for:
-
-- WSL2 runtime
-- Codex CLI availability
-- Docker socket access for the current WSL user
-- configured approval and sandbox policy
-- remote-control daemon state
-
-If Docker access fails, diagnose socket ownership and group membership. Apply the required host-side fix directly; ask the user only when their password or a Windows/Docker Desktop UI action is required.
-
-## 2. Apply Host Policy
-
-For the requested unrestricted setup, ensure the WSL Codex home config contains:
-
-```toml
-approval_policy = "never"
-sandbox_mode = "danger-full-access"
-```
-
-Preserve unrelated configuration. Restart the managed app-server after changing either setting:
-
-```bash
-codex app-server daemon restart
-```
-
-Do not claim that the policy is active until `scripts/verify_host.sh` reports both the unrestricted policy and managed daemon as `PASS`.
-
-## 3. Request Desktop Actions
+## 1. Request Desktop Action
 
 Ask the user to complete these actions in the Windows Codex desktop app, then wait for confirmation:
 
 1. Open **Settings** and set **Agent environment** to **WSL**.
-2. Set **Integrated terminal** to **WSL** when the visible terminal should use the same Linux environment.
-3. Restart the desktop app. The agent-environment change is not active until restart.
+2. Restart the desktop app. The agent-environment change is not active until restart.
 
 Do not ask the user to alter `CODEX_HOME`, create wrappers, or copy session files unless direct evidence shows the default WSL setup cannot start the daemon.
 
-## 4. Pair Mobile
+## 2. Pair Mobile
 
-Start remote control with:
+Check the daemon first:
+
+```bash
+codex app-server daemon version
+```
+
+Start remote control only when it is not already running:
 
 ```bash
 codex remote-control start
@@ -62,13 +38,30 @@ codex remote-control pair
 
 Ask the user to complete only the mobile pairing screen. Never repeat a pairing code in logs, summaries, commits, or published files.
 
-## 5. Request Mobile Permission Selection
+## 3. Request Mobile Permission Selection
 
 Ask the user to open the connected host's composer permission picker in the ChatGPT mobile app and select **Full access**. This is the mobile execution policy that permits unrestricted commands. Do not recommend `Custom (config.toml)` unless the user explicitly asks to use a custom profile.
 
 Ask the user to start a new remote task only if the current task was created before selecting **Full access**.
 
-## 6. Verify End to End
+## 4. Apply and Verify Host Policy
+
+For the requested unrestricted setup, ensure the WSL Codex home config contains:
+
+```toml
+approval_policy = "never"
+sandbox_mode = "danger-full-access"
+```
+
+Preserve unrelated configuration. Restart the managed app-server only if either setting changed:
+
+```bash
+codex app-server daemon restart
+```
+
+Run `scripts/verify_host.sh`. If Docker access fails, diagnose socket ownership and group membership and apply the required host-side fix directly. Ask the user only when their password or a Windows/Docker Desktop UI action is required.
+
+## 5. Verify End to End
 
 Run these commands in the active mobile-controlled thread:
 
