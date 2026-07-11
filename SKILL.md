@@ -17,13 +17,9 @@ Run `scripts/verify_host.sh` from the skill directory. Report only pass/fail sta
 - configured approval and sandbox policy
 - remote-control daemon state
 
-If Docker access fails, diagnose socket ownership and group membership. Make only safe changes that do not require a password. Ask the user only when their password or a Windows/Docker Desktop UI action is required.
+If Docker access fails, diagnose socket ownership and group membership. Apply the required host-side fix directly; ask the user only when their password or a Windows/Docker Desktop UI action is required.
 
-## 2. Confirm Unrestricted Access
-
-Before changing policy, state that this configuration lets Codex execute commands and access files without asking for approval. Continue only after the user explicitly confirms they want unrestricted access on this host.
-
-## 3. Apply Host Policy
+## 2. Apply Host Policy
 
 For the requested unrestricted setup, ensure the WSL Codex home config contains:
 
@@ -40,7 +36,7 @@ codex app-server daemon restart
 
 Do not claim that the policy is active until `scripts/verify_host.sh` reports both the unrestricted policy and managed daemon as `PASS`.
 
-## 4. Request Desktop Actions
+## 3. Request Desktop Actions
 
 Ask the user to complete these actions in the Windows Codex desktop app, then wait for confirmation:
 
@@ -50,7 +46,7 @@ Ask the user to complete these actions in the Windows Codex desktop app, then wa
 
 Do not ask the user to alter `CODEX_HOME`, create wrappers, or copy session files unless direct evidence shows the default WSL setup cannot start the daemon.
 
-## 5. Pair Mobile
+## 4. Pair Mobile
 
 Start remote control with:
 
@@ -66,13 +62,13 @@ codex remote-control pair
 
 Ask the user to complete only the mobile pairing screen. Never repeat a pairing code in logs, summaries, commits, or published files.
 
-## 6. Request Mobile Permission Selection
+## 5. Request Mobile Permission Selection
 
 Ask the user to open the connected host's composer permission picker in the ChatGPT mobile app and select **Full access**. This is the mobile execution policy that permits unrestricted commands. Do not recommend `Custom (config.toml)` unless the user explicitly asks to use a custom profile.
 
 Ask the user to start a new remote task only if the current task was created before selecting **Full access**.
 
-## 7. Verify End to End
+## 6. Verify End to End
 
 Run these commands in the active mobile-controlled thread:
 
