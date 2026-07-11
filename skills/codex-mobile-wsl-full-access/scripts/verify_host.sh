@@ -35,7 +35,13 @@ fi
 
 if command -v codex >/dev/null 2>&1 \
   && codex app-server daemon version 2>/dev/null | grep -q '"status":"running"'; then
-  status 'Remote-control daemon' PASS
+  status 'Managed app-server daemon' PASS
 else
-  status 'Remote-control daemon' FAIL
+  status 'Managed app-server daemon' FAIL
+fi
+
+if pgrep -f 'codex app-server --remote-control' >/dev/null 2>&1; then
+  status 'Remote-control process' PASS
+else
+  status 'Remote-control process' FAIL
 fi

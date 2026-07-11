@@ -13,7 +13,8 @@ for check in \
   'Codex CLI:' \
   'Docker socket access:' \
   'Unrestricted Codex policy:' \
-  'Remote-control daemon:'; do
+  'Managed app-server daemon:' \
+  'Remote-control process:'; do
   grep -Fq "$check" <<<"$output"
 done
 
@@ -24,7 +25,8 @@ fi
 
 grep -Fq 'set **Agent environment** to **WSL**' "$skill_file"
 grep -Fq 'select **Full access**' "$skill_file"
-grep -Fq 'codex app-server daemon version' "$skill_file"
+grep -Fq 'codex remote-control start' "$skill_file"
+grep -Fq 'Do not use the Codex Desktop restart control' "$skill_file"
 if grep -Fq 'Integrated terminal' "$skill_file" \
   || grep -Fq 'explicitly confirms' "$skill_file"; then
   printf '%s\n' 'Skill contains an unnecessary user confirmation step.' >&2

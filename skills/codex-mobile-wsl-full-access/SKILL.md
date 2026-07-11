@@ -18,13 +18,7 @@ Do not ask the user to alter `CODEX_HOME`, create wrappers, or copy session file
 
 ## 2. Pair Mobile
 
-Check the daemon first:
-
-```bash
-codex app-server daemon version
-```
-
-Start remote control only when it is not already running:
+Run `scripts/verify_host.sh`. If it reports `Remote-control process: FAIL`, start remote control with:
 
 ```bash
 codex remote-control start
@@ -53,11 +47,9 @@ approval_policy = "never"
 sandbox_mode = "danger-full-access"
 ```
 
-Preserve unrelated configuration. Restart the managed app-server only if either setting changed:
+Preserve unrelated configuration. Do not use the Codex Desktop restart control after remote control is enabled. It can replace the remote-control process with a plain app-server. If the remote-control process is absent, recover it with `codex remote-control start`.
 
-```bash
-codex app-server daemon restart
-```
+If either setting changed, ask the user to start a new mobile task with **Full access**. Do not restart the desktop app or daemon for this policy change.
 
 Run `scripts/verify_host.sh`. If Docker access fails, diagnose socket ownership and group membership and apply the required host-side fix directly. Ask the user only when their password or a Windows/Docker Desktop UI action is required.
 
@@ -78,7 +70,7 @@ Report only:
 
 - desktop agent environment is WSL
 - mobile permission mode is Full access
-- managed remote daemon is running
+- remote-control process is running
 - Docker end-to-end check passed without approval
 
 Do not include personal or machine-specific information.
