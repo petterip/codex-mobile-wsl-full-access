@@ -1,0 +1,9 @@
+.codex/
+.env
+.env.*
+!.env.example
+*.key
+*.log
+*.pem
+*.sqlite
+.DS_Store

@@ -1,0 +1,25 @@
+name: Validate skill
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate skill structure
+        run: |
+          test -f skills/codex-mobile-wsl-full-access/SKILL.md
+          grep -q '^name: codex-mobile-wsl-full-access$' skills/codex-mobile-wsl-full-access/SKILL.md
+          grep -q '^description:' skills/codex-mobile-wsl-full-access/SKILL.md
+      - name: Validate scripts
+        run: |
+          bash -n skills/codex-mobile-wsl-full-access/scripts/verify_host.sh
+          bash -n skills/codex-mobile-wsl-full-access/scripts/test_verify_host.sh
+          skills/codex-mobile-wsl-full-access/scripts/test_verify_host.sh
