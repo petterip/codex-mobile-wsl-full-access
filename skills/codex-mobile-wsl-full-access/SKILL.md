@@ -18,7 +18,9 @@ Do not ask the user to alter `CODEX_HOME`, create wrappers, or copy session file
 
 ## 2. Pair Mobile
 
-Run `scripts/verify_host.sh`. If it reports `Remote-control process: FAIL`, start remote control with:
+Run `bash scripts/verify_host.sh`. It is strict: any required host prerequisite returns a non-zero status. Use `bash scripts/verify_host.sh --report` for diagnostics without a failing exit code, or `--json` for machine-readable results.
+
+If `Remote-control process configuration` fails, start remote control with:
 
 ```bash
 codex remote-control start
@@ -51,7 +53,7 @@ Preserve unrelated configuration. Do not use the Codex Desktop restart control a
 
 If either setting changed, ask the user to start a new mobile task with **Full access**. Do not restart the desktop app or daemon for this policy change.
 
-Run `scripts/verify_host.sh`. If Docker access fails, diagnose socket ownership and group membership and apply the required host-side fix directly. Ask the user only when their password or a Windows/Docker Desktop UI action is required.
+Run `bash scripts/verify_host.sh`. If Docker access fails, diagnose socket ownership and group membership and apply the required host-side fix directly. The verifier bounds Docker and daemon probes; a timeout is a failure, not a pass. Ask the user only when their password or a Windows/Docker Desktop UI action is required.
 
 ## 5. Verify End to End
 
@@ -64,11 +66,15 @@ docker info >/dev/null && printf 'docker info: PASS\n'
 
 Success requires both commands to finish and no mobile approval card to appear. Ask the user only whether an approval card appeared. If it did, stop and inspect the active session policy before changing any configuration.
 
+`Remote-control process configuration: PASS` proves only that the local process was launched with the remote-control argument. The CLI has no readiness endpoint for mobile connectivity; the active mobile-thread command above is the required end-to-end proof.
+
+Mobile pairing and approval-free execution remain a separate mobile-thread check and are never inferred from a local daemon or process lookup.
+
 ## Completion Report
 
 Report only:
 
 - desktop agent environment is WSL
 - mobile permission mode is Full access
-- remote-control process is running
+- remote-control process is configured
 - Docker end-to-end check passed without approval
